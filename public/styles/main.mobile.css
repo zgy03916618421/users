@@ -1,0 +1,96 @@
+@charset "UTF-8";
+@media only screen and (max-width: 481px) {
+  html, body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* 禁止长按链接、图片后弹出菜单 */
+  a, img {
+    -webkit-touch-callout: none;
+  }
+
+  html {
+    font-size: 12px !important;
+  }
+
+  body {
+    position: relative;
+    font-size: 16px !important;
+    width: 100%;
+    min-width: 13.3333333333rem;
+    overflow: hidden;
+  }
+
+  #icon-title {
+    font-size: 1.1666666667rem;
+  }
+
+  #icon-desc {
+    font-size: 1rem;
+  }
+
+  #header-inner {
+    position: relative;
+    width: 100%;
+  }
+
+  #like, #share, #share-wechat, #share-weibo
+  , #share-qq, #share-qzone {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #d-img-wrap {
+    position: absolute;
+    right: 0;
+  }
+
+  #poem-inner {
+    width: 100%;
+  }
+
+  .poem-content {
+    width: 100%;
+  }
+
+  #user-avatar {
+    width: 5.8333333333rem;
+    height: 5.8333333333rem;
+    border-width: 4px;
+    margin-right: 0.8333333333rem;
+  }
+  #user-avatar img {
+    width: 5.8333333333rem;
+  }
+
+  #poem-spec {
+    width: 60%;
+  }
+
+  #poem-spec div:first-child {
+    font-size: 1.4166666667rem;
+    min-width: 11.0833333333rem;
+  }
+
+  #poem-spec div:last-child {
+    font-size: 1.0833333333rem;
+  }
+
+  .poem-spec {
+    width: 60%;
+  }
+
+  .poem-content span {
+    font-size: 1.1666666667rem;
+  }
+
+  #poems-hot {
+    width: 100%;
+  }
+
+  .poem-hot {
+    width: 100%;
+  }
+}

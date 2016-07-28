@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>美读录音数据统计</title>
+		<link rel="stylesheet" href="/others/bootstrap/css/bootstrap.min.css">
+        <script src="/scripts/jquery-1.9.1.min.js"></script>
+        <script src="/others/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/scripts/ajaxfileupload.js"></script>
+        <script type="text/javascript" src="/scripts/moment.min.js"></script>
+        <link href="/styles/ajaxfileupload.css" type="text/css" rel="stylesheet">
+        <link href="/styles/upload.css" type="text/css" rel="stylesheet">
+        <script>
+            Date.prototype.format = function(format)
+            {
+                var o = {
+                    "M+" : this.getMonth()+1, //month
+                    "d+" : this.getDate(),    //day
+                    "h+" : this.getHours(),   //hour
+                    "m+" : this.getMinutes(), //minute
+                    "s+" : this.getSeconds(), //second
+                    "q+" : Math.floor((this.getMonth()+3)/3),  //quarter
+                    "S" : this.getMilliseconds() //millisecond
+                }
+                if(/(y+)/.test(format)) format=format.replace(RegExp.$1,
+                        (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+                for(var k in o)if(new RegExp("("+ k +")").test(format))
+                    format = format.replace(RegExp.$1,
+                            RegExp.$1.length==1 ? o[k] :
+                                    ("00"+ o[k]).substr((""+ o[k]).length));
+                return format;
+            }
+            function deleteitem(id){
+                if(confirm("是否确定删除此数据")){
+                    $.post('/record_info/delete',{id:id},function(result){
+                        if(result){
+                            alert('删除成功');
+                            $('#tr_'+id).remove();
+                        }else{
+                            alert('删除失败');
+                        }
+                    })
+                }
+            }
+            function assignmentForm(doc){
+                $('#_id').val(doc._id);
+                $('#_rev').val(doc._rev);
+                $('#time').val(doc.time);
+                $('#app_verstion').val(doc.app_verstion);
+                $('#platform').val(doc.platform);
+                $('#content_id').val(doc.content_id);
+                $('#local_record_id').val(doc.local_record_id);
+                $('#length').val(doc.length);
+                $('#user_id').val(doc.user_id);
+                $('#format').val(doc.format)
+                $('#time').val(doc.time);
+                $('#server_record_id').val(doc.server_record_id);
+                $('#addBtn').click();
+            }
+            function initForm(){
+                $('#_id').val('');
+                $('#_rev').val('');
+                $('#time').val('');
+                $('#app_verstion').val('');
+                $('#platform').val('');
+                $('#content_id').val('');
+                $('#local_record_id').val('');
+                $('#length').val('');
+                $('#user_id').val('');
+                $('#format').val('');
+                $('#time').val('');
+                $('#server_record_id').css('display','none');
+                $('#length').css('display','none');
+                $('#server_record_id').val('');
+            }
+            function lockForm(){
+                $('#app_verstion').attr('readonly','readonly');
+                $('#platform').attr('readonly','readonly');
+                $('#content_id').attr('readonly','readonly');
+                $('#local_record_id').attr('readonly','readonly');
+                $('#length').attr('readonly','readonly');
+                $('#user_id').attr('readonly','readonly');
+                $('#format').attr('readonly','readonly');
+                //$('#time').attr('readonly','readonly');
+                $('#audio').attr('disabled','disabled');
+                $('#server_record_id').attr('css','none');
+                $('#server_record_id').val('');
+            }
+            function unlockForm(){
+                $('#content_id').removeAttr('readonly');
+                $('#user_id').removeAttr('readonly');
+            }
+
+
+            function ajaxappendhtml(query){
+                $.get('/record_info',query,function(data){
+                    if(data.isok==false){
+                        alert(data.isok);
+                        return;
+                    }else{
+                        $('#record_info_list').html('');
+                        for(var i=0;i<data.length;i++){
+                            var brclass = '';
+                            if(i%2==0){
+                                brclass = 'class=success';
+                            }
+                            buildHTML(data[i].value,brclass);
+                        }
+                    }
+                });
+            }
+            $(function(){
+                $('#sortUl li').bind('click',function(){
+                    var sort = $(this).attr('value');
+                    var style = $('#styleId').val();
+                    $('#sortBtn').text($(this).text());
+                    $('#sortId').val(sort);
+                    $('#sortId').text($(this).val());
+                    ajaxappendhtml({sort:sort,style:style,key:''});
+                })
+                $('#styleUl li').bind('click',function(){
+                    var style = $(this).attr('value');
+                    var sort = $('#sortId').val();
+                    $('#key_text').attr('placeholder','根据'+$(this).text()+'搜索');
+                    $('#styleBtn').text($(this).text());
+                    $('#styleId').text(style);
+                    $('#styleId').val(style);
+                    ajaxappendhtml({sort:sort,style:style,key:''});
+
+                })
+                $('#addBtn').click(function(){
+                    $('#myModalLabel').text($(this).text());
+                    $('#myModal').modal()                      // 以默认值初始化
+                    $('#myModal').modal({ keyboard: false })   // initialized with no keyboard
+                    $('#myModal').modal('show')                // 初始化后立即调用 show 方法
+                })
+
+                $('#submitBtn').click(function(){
+                    var query = $('#record_info_form').serializeArray();
+                    $.post('/record_info',query,function(result){
+                        if(result.isok){
+                            alert('操作成功')
+                            location.reload();
+                        }else{
+                            alert('操作失败')
+                        }
+                    })
+                })
+
+                $('#searchBtn').click(function(){
+                    var key = $('#key_text').val();
+                    var style = $('#styleId').val();
+                    var sort = $('#sortId').val();
+                    ajaxappendhtml({sort:sort,style:style,key:key});
+                })
+
+                $('#myModal').on('hidden.bs.modal',function(e){
+                    $('#time').css('display','none');
+                    initForm();
+                    unlockForm();
+                })
+
+                $("#audio").change(function(e){
+                    var file = e.currentTarget.files[0];
+                    objectUrl = URL.createObjectURL(file);
+                    $("#audioHidden").prop("src", objectUrl);
+                    ajaxFileUpload(this);
+                });
+
+                $("#audioHidden").on("canplaythrough", function(e){
+                    var seconds = e.currentTarget.duration;
+                    $('#length').val(seconds);
+                    $('#length').css('display','block');
+                    URL.revokeObjectURL(objectUrl);
+                });
+            })
+            function eidtOrView(obj){
+                var id = $(obj).attr('id');
+                var view = $(obj).attr('value');
+                $.get('/record_info/'+id,{id:id},function(doc){
+                    if(doc.isok){
+                        assignmentForm(doc);
+                        if(view=='view'){
+                            lockForm();
+                        }
+                    }else{
+                        alert('查找失败');
+                    }
+                })
+            }
+            function buildHTML(doc,brclass){
+                var html =
+                        '<tr '+ brclass + '>' +
+                                '<td>'+doc._id+'</td>'+
+                                '<td>'+doc.app_verstion+'</td>'+
+                                '<td>'+doc.content_id+'</td>'+
+                                '<td>'+doc.format+'</td>'+
+                                '<td>'+doc.length+'</td>'+
+                                '<td>'+doc.local_record_id+'</td>'+
+                                '<td>'+doc.platform+'</td>'+
+                                '<td>'+doc.server_record_id+'</td>'+
+                                '<td>'+new Date(parseInt(doc.time)).format('yyyy-MM-dd hh:mm:ss')+'</td>'+
+                                '<td>'+doc.time+'</td>'+
+                                '<td>'+doc.user_id+'</td>'+
+                                '<td>'+
+                                '<a onclick="eidtOrView(this)" value="edit" title="编辑" href="#" id="'+doc._id+'"><i class="glyphicon glyphicon-pencil"></i></a>'+
+                                '<a title="删除" href="javascript:void(0)" onclick="deleteitem('+"'"+doc._id+"'"+')">' +
+                                '<i class="glyphicon glyphicon-remove"></i></a>'+
+                                '<a onclick="eidtOrView(this)" class="editview" value="view" title="详情" href="#" id="'+doc._id+'">' +
+                                '<i class="glyphicon glyphicon-list-alt"></i></a>'+
+                                '</td>'+
+                                '</tr>';
+                $('#record_info_list').append(html);
+            }
+
+            function ajaxFileUpload(obj) {
+                /*
+                 $("#loading").ajaxStart(function(){
+                 $(this).show();
+                 })//开始上传文件时显示一个图片
+                 .ajaxComplete(function(){
+                 $(this).hide();
+                 });//文件上传完成将图片隐藏起来
+                 */
+                var name = obj.id;
+                $.ajaxFileUpload
+                (
+                        {
+                            url: '/upload',        //用于文件上传的服务器端请求地址
+                            secureuri: false,           //是否需要安全协议，一般设置为false
+                            fileElementId: name,        //文件上传域的ID
+                            dataType: 'json',           //返回值类型 一般设置为json
+                            success: function (data, status)
+                            {
+                                if(data.err){
+                                    alert(data.err);
+                                    return;
+                                }
+                                $('#server_record_id').val(data.name);
+                                $('#server_record_id').css('display','block');
+                                alert("上传成功");
+                            },
+                            error: function (data, status, e)
+                            {
+                                alert(e);
+                            }
+                        }
+                )
+                return false;
+            }
+        </script>
+	</head>
+    <body>
+    <audio style="display: none" id="audioHidden"></audio>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 70%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">新增</h4>
+                </div>
+                <div class="modal-body">
+                    <form   method='post' id='record_info_form'>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control"  class="inputxt"  name="_id" placeholder="_id" id="_id">
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control"  class="inputxt"  name="_rev" placeholder="_rev" id="_rev">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control"  class="inputxt" value="2.1.1" name="app_verstion"  id="app_verstion" readonly>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" value="iOS" class="form-control" name="platform" id="platform" readonly>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="content_id" placeholder="content_id" id="content_id"  >
+                        </div>
+                        <div class="form-group">
+                            <input type="text" value="7_1407162823.510261.wav" class="form-control" name="local_record_id"  id="local_record_id" readonly >
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="user_id" placeholder="user_id" id="user_id"  >
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="format" value="mp3" id="format"  readonly>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" name="time" placeholder="time" id="time"  >
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="length" placeholder="length" id="length"  style="display: none" readonly>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" readonly placeholder="server_record_id" name="server_record_id" id="server_record_id"  style="display: none" >
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">上传音频</label>
+                            <input type="file" id="audio" name="file" multiple/>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" multiple id="submitBtn">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Brand</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#">Link</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Action</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">One more separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Link</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Action</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <div class="container-fluid">
+        <hr style="width: 100%">
+        <div style="padding-top: 0px; padding-bottom: 20px;">
+            <a  id="addBtn" data-toggle="modal"   role="button" type="button" class="btn btn-primary" value="add"><i
+                    class="icon-plus icon-white" ></i> 新增</a>
+            <button type="button" class="btn btn-primary" id='searchBtn' style="float: right">
+                <i class="icon-search icon-white"></i> 搜索
+            </button>
+            <div class="form-group" style="float: right;margin-right: 5px">
+                <input class="form-control" type="text" id="key_text" by="byId" placeholder="根据时间戳搜索">
+            </div>
+            <div style="float: right;margin-right: 5px">
+                <!-- Single button -->
+                <div class="btn-group" style="float: right">
+                    <button id="sortBtn" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-expanded="false">
+                        排序 <span class="caret"></span>
+                    </button>
+                    <input type="hidden" id="sortId"/>
+                    <ul class="dropdown-menu" role="menu" id="sortUl">
+                        <li value="desc"><a href="#">逆序（默认）</a></li>
+                        <li value="asc"><a href="#">顺序</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group" style="float: right;margin-right: 5px">
+                    <button id="styleBtn" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-expanded="false">
+                        筛选方式 <span class="caret"></span>
+                    </button>
+                    <input type="hidden" id="styleId"/>
+                    <ul class="dropdown-menu" role="menu" id="styleUl">
+                        <li value="byTime"><a href="#">时间</a></li>
+                        <li value="byId"><a href="#">_id</a></li>
+                        <li value="byPlatform"><a href="#">平台</a></li>
+                        <li value="byFilename"><a href="#">文件名</a></li>
+                        <li value="byUserId"><a href="#">用户ID</a></li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="panel-warning">
+                <!-- Default panel contents -->
+                <div class="panel-heading">Panel heading</div>
+                <div style="display: block;width: 100%;overflow-x: scroll">
+                <!-- Table -->
+                    <table class="table" >
+                        <tr>
+                            <th>_id</th>
+                            <th>app_verstion</th>
+                            <th>content_id</th>
+                            <th>format</th>
+                            <th>length</th>
+                            <th>local_record_id</th>
+                            <th>platform</th>
+                            <th>server_record_id</th>
+                            <th>time</th>
+                            <th>timestamp</th>
+                            <th>user_id</th>
+                            <th>操作</th>
+                        </tr>
+                        <tbody id="record_info_list">
+                        <%if(data!=undefined){
+                            for(var i=0;i<data.length;i++){ %>
+                        <tr
+                        <%if(i%2==0){%>class='success'<%}%> id='tr_<%=data[i].value._id%>'>
+                        <td><%=data[i].value._id%></td>
+                        <td><%=data[i].value.app_verstion%></td>
+                        <td><%=data[i].value.content_id%></td>
+                        <td><%=data[i].value.format%></td>
+                        <td><%=data[i].value.length%></td>
+                        <td><%=data[i].value.local_record_id%></td>
+                        <td><%=data[i].value.platform%></td>
+                        <td><%=data[i].value.server_record_id%></td>
+                        <td><script>document.write(new Date(parseInt('<%=data[i].value.time%>')).format('yyyy-MM-dd hh:mm:ss'))</script></td>
+                        <td><%=data[i].value.time%></td>
+                         <td><%=data[i].value.user_id%></td>
+                        <td>
+                            <a title="编辑" href="#" onclick="eidtOrView(this)" value='edit' id="<%=data[i].value._id%>"><i
+                                    class="glyphicon glyphicon-pencil"></i></a>
+                            <a title="删除" href="javascript:void(0)" onclick="deleteitem('<%=data[i].value._id%>')"><i
+                                    class="glyphicon glyphicon-remove"></i></a>
+                            <a title="详情" href="#" onclick="eidtOrView(this)" value='view' id="<%=data[i].value._id%>"><i
+                                    class="glyphicon glyphicon-list-alt"></i></a>
+                        </td>
+                        </tr>
+                        <%}}%>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+</html>

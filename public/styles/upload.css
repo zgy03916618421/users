@@ -1,0 +1,22 @@
+body{
+
+}
+.container{
+    width: 80%;
+}
+.container input{
+    margin: 5px 0;
+}
+.container label{
+    font-size: 15px;
+}
+.header{
+    height: 60px;
+    width: 100%;
+    background-image: url("");
+}
+.content{
+    width: 100%;
+    padding: 8px 12px;
+    background-image: url("../images/bg.png");
+}

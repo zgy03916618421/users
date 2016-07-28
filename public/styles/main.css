@@ -1,0 +1,504 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 18px;
+}
+
+body {
+  font-size: 16px;
+}
+
+body {
+  background: url("../images/bg.png");
+  background-size: contain;
+  min-width: 40rem;
+}
+
+#header {
+  width: 100%;
+  height: 5rem;
+  border-bottom: 1px solid #DADADA;
+  background-color: #fff;
+}
+
+#header-inner {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  width: 40rem;
+  line-height: 5rem;
+}
+
+#header-inner img {
+  display: inline-block;
+}
+
+#icon-img {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0 0.8333333333rem 0 1.25rem;
+  width: 3.4166666667rem;
+  height: auto;
+}
+
+#icon-content {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 3.4166666667rem;
+}
+
+#icon-title {
+  display: block;
+  padding-bottom: 0.5833333333rem;
+  font-size: 1.0833333333rem;
+  color: #000;
+  line-height: 1.0833333333rem;
+}
+
+#icon-desc {
+  display: block;
+  font-size: 0.8333333333rem;
+  color: #909090;
+  line-height: 0.8333333333rem;
+}
+
+#d-img-wrap {
+  display: inline-block;
+  height: 100%;
+  line-height: 5rem;
+  float: right;
+}
+
+#d-img {
+  padding-right: 1.25rem;
+  vertical-align: middle;
+  width: 6.1666666667rem;
+}
+
+#poem-outer {
+  position: relative;
+  width: 100%;
+}
+
+#poem-inner {
+  position: relative;
+  width: 40rem;
+  height: 12.9166666667rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#poem-info {
+  display: inline-block;
+  margin-top: 2.5rem;
+  margin-left: 1.25rem;
+  width: 90%;
+}
+
+#user-avatar {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 1.6666666667rem;
+  width: 6.25rem;
+  height: 6.25rem;
+  border: 7px solid #fff;
+  border-radius: 6.25rem;
+  overflow: hidden;
+}
+#user-avatar img {
+  width: 6.25rem;
+  height: auto;
+  border-radius: 6.25rem;
+}
+
+#poem-spec {
+  display: inline-block;
+  vertical-align: middle;
+  width: 70%;
+}
+#poem-spec div:first-child {
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+  text-indent: -0.5em;
+  margin-bottom: 0.8333333333rem;
+}
+#poem-spec div:last-child {
+  font-size: 1rem;
+  line-height: 1rem;
+  color: #606060;
+}
+
+#social-panel {
+  position: absolute;
+  right: 0;
+  bottom: 1.25rem;
+}
+
+#like, #share {
+  display: inline-block;
+  margin-right: 1.25rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+#like {
+  margin-right: 1.6666666667rem;
+  width: 2.1666666667rem;
+  height: 2.1666666667rem;
+  background: url("../images/icon_like.png");
+  background-size: cover;
+}
+
+#like.active {
+  background: url("../images/icon_like_press.png");
+  background-size: cover;
+}
+
+#share {
+  width: 2.1666666667rem;
+  height: 2.1666666667rem;
+  background: url("../images/icon_share.png");
+  background-size: cover;
+}
+
+#share:active {
+  background: url("../images/icon_share_press.png");
+  background-size: cover;
+}
+
+#prog-bar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 0.25rem;
+  background: #dedede;
+}
+
+#bar {
+  content: "";
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background: #6BD784;
+}
+
+#play-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  -webkit-transform: translate(-50%, 50%);
+  transform: translate(-50%, 50%);
+  width: 5.4166666667rem;
+  height: 5.4166666667rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  background: url("../images/icon_play.png");
+  background-size: cover;
+}
+#play-btn img {
+  display: none;
+}
+
+#play-btn:active {
+  background: url("../images/icon_play_press.png");
+  background-size: cover;
+}
+
+#pause-btn {
+  position: absolute;
+  display: none;
+  left: 50%;
+  bottom: 0;
+  -webkit-transform: translate(-50%, 50%);
+  transform: translate(-50%, 50%);
+  width: 5.4166666667rem;
+  height: 5.4166666667rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  background: url("../images/icon_pause.png");
+  background-size: cover;
+}
+#pause-btn img {
+  display: none;
+}
+
+#share-mask {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 200vw;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+#shareWindow {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  -webkit-transform: translate(-50%, 50%);
+  transform: translate(-50%, 50%);
+  width: 24.1666666667rem;
+  height: 11.5rem;
+  border-radius: 0.4166666667rem;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 2px #999;
+  z-index: 1;
+}
+
+#share-title {
+  width: 100%;
+  height: 2.3333333333rem;
+  line-height: 2.3333333333rem;
+  background: #f3f3f3;
+  border-bottom: 1px solid #d0d0d0;
+}
+#share-title span {
+  margin-left: 1.25rem;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 0.8333333333rem;
+  color: #909090;
+}
+#share-title div {
+  margin-right: 1.25rem;
+  display: inline-block;
+  height: 100%;
+  float: right;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+#share-title img {
+  display: inline-block;
+  vertical-align: middle;
+  width: 0.8333333333rem;
+}
+
+#share-list {
+  width: 100%;
+  height: 9.125rem;
+  line-height: 9.125rem;
+}
+#share-list img {
+  display: none;
+}
+
+._share-icon, #share-wechat, #share-weibo, #share-qq, #share-qzone {
+  margin-left: 2.0833333333rem;
+  display: inline-block;
+  vertical-align: middle;
+  width: 3.3333333333rem;
+  height: 3.3333333333rem;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#share-wechat {
+  margin-left: 2.3333333333rem;
+  background: url("../images/icon_wechat.png");
+  background-size: cover;
+}
+
+#share-wechat:active {
+  background: url("../images/icon_wechat_press.png");
+  background-size: cover;
+}
+
+#share-weibo {
+  background: url("../images/icon_weibo.png");
+  background-size: cover;
+}
+
+#share-weibo:active {
+  background: url("../images/icon_weibo_press.png");
+  background-size: cover;
+}
+
+#share-qq {
+  background: url("../images/icon_qq.png");
+  background-size: cover;
+}
+
+#share-qq:active {
+  background: url("../images/icon_qq_press.png");
+  background-size: cover;
+}
+
+#share-qzone {
+  background: url("../images/icon_qzone.png");
+  background-size: cover;
+}
+
+#share-qzone:active {
+  background: url("../images/icon_qzone_press.png");
+  background-size: cover;
+}
+
+#pause-btn:active {
+  background: url("../images/icon_pause_press.png");
+  background-size: cover;
+}
+
+#poem-content-wrap {
+  width: 100%;
+  background: #fff;
+}
+
+.poem-content {
+  padding: 5.0416666667rem 0 1.25rem;
+  margin: 0 auto;
+  margin-bottom: 1.6666666667rem;
+  width: 40rem;
+  height: 65px;
+  overflow: hidden;
+  text-align: center;
+}
+.poem-content .author {
+  color: #808080;
+}
+.poem-content span {
+  display: inline-block;
+  width: 100%;
+  font-size: 1rem;
+  line-height: 1.8em;
+  color: #606060;
+}
+.poem-content span:after {
+  content: '\A';
+  white-space: pre;
+}
+.poem-content span:last-child {
+  margin-bottom: 0;
+}
+
+.expand-btn {
+  display: block;
+  margin: 0 auto;
+  width: 1.4166666667rem;
+  height: 0.75rem;
+  cursor: pointer;
+  background: url("../images/arrow.png");
+  background-size: cover;
+}
+
+#poems-hot-wrap {
+  margin-bottom: 4.1666666667rem;
+  width: 100%;
+  border-bottom: 1px solid #ECECEC;
+  background: #fff;
+}
+
+#poems-hot {
+  width: 40rem;
+  margin: 0 auto;
+}
+
+#hot-title {
+  display: block;
+  padding-top: 1.75rem;
+  margin-bottom: 0.9166666667rem;
+  padding-left: 1.25rem;
+  font-size: 1.1666666667rem;
+  line-height: 1.1666666667rem;
+}
+
+.poem-hot {
+  border-top: 1px solid #dedede;
+  line-height: 6.25rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+.poem-hot:last-child {
+  border-bottom: none;
+}
+
+.poem-hot:last-child {
+  border-bottom: 1px solid #dedede;
+}
+
+.play-btn {
+  display: inline-block;
+  height: 100%;
+  line-height: 100%;
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+}
+.play-btn img {
+  display: inline-block;
+  vertical-align: middle;
+  width: 3.75rem;
+}
+
+.poem-spec {
+  display: inline-block;
+  vertical-align: middle;
+  width: 70%;
+}
+.poem-spec div:first-child {
+  margin-bottom: 0.8333333333rem;
+  font-size: 1.25rem;
+  text-indent: -0.5em;
+  line-height: 1.25rem;
+}
+.poem-spec div:last-child {
+  font-size: 1rem;
+  color: #808080;
+  line-height: 1rem;
+}
+
+.like-wrap {
+  display: inline-block;
+  margin-right: 1.5rem;
+  height: 6.25rem;
+  line-height: 6.25rem;
+  float: right;
+}
+
+.like {
+  -webkit-transform: translateX(50%);
+  transform: translateX(50%);
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  line-height: 100%;
+}
+.like img {
+  display: inline-block;
+  margin-bottom: 0.6666666667rem;
+  width: 1.25rem;
+  line-height: 1.25rem;
+}
+.like span {
+  display: inline-block;
+  font-size: 1rem;
+  line-height: 1rem;
+  color: #f76d6a;
+}
+
+#wrap-404 {
+  display: none;
+}
